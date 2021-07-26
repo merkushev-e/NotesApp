@@ -39,7 +39,7 @@ public class NotesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         isLand = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        if(isLand){
+        if (isLand) {
             showNotesContentLand(DEFAULT_INDEX);
         }
         initList(view);
@@ -63,10 +63,11 @@ public class NotesFragment extends Fragment {
 
         }
     }
+
     private void showNotesContent(int finalIndex) {
-        if(isLand){
+        if (isLand) {
             showNotesContentLand(finalIndex);
-        }else {
+        } else {
             showNotesContentPort(finalIndex);
         }
     }
@@ -88,7 +89,7 @@ public class NotesFragment extends Fragment {
     }
 
 
-    void updateText(int index){
+    void updateText(int index) {
         LinearLayout linearLayout = (LinearLayout) getView();
         for (int i = 0; i < linearLayout.getChildCount(); i++) {
             TextView textView = (TextView) linearLayout.getChildAt(i);
