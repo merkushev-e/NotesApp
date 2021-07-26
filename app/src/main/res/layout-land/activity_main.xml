@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <fragment
         android:id="@+id/notes_fragments"
         android:name="ru.gb.notesapp.NotesFragment"
@@ -10,8 +11,10 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/notes_content_fragments"
+        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_weight = "2"/>
     <FrameLayout
         android:id="@+id/notes_content_fragments"
         android:layout_height="0dp"
@@ -20,6 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/notes_fragments"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_weight = "3"
         >
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
