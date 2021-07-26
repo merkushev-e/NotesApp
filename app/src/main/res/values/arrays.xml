@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="notes">
+        <item>Notes Headline1</item>
+        <item>Notes Headline2</item>
+        <item>Notes Headline3</item>
+        <item>Notes Headline4</item>
+        <item>Notes Headline5</item>
+        <item>Notes Headline6</item>
+    </string-array>
+    <string-array name="notes_content">
+        <item>1Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquam at, autem dolore, dolores ducimus eaque id maxime odit officia praesentium repudiandae suscipit! Adipisci architecto eius labore minima neque, repudiandae?
+        </item>
+        <item>2Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquam at, autem dolore, dolores ducimus eaque id maxime odit officia praesentium repudiandae suscipit! Adipisci architecto eius labore minima neque, repudiandae?
+        </item>
+        <item>3Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquam at, autem dolore, dolores ducimus eaque id maxime odit officia praesentium repudiandae suscipit! Adipisci architecto eius labore minima neque, repudiandae?
+        </item>
+        <item>4Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquam at, autem dolore, dolores ducimus eaque id maxime odit officia praesentium repudiandae suscipit! Adipisci architecto eius labore minima neque, repudiandae?
+        </item>
+        <item>5Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquam at, autem dolore, dolores ducimus eaque id maxime odit officia praesentium repudiandae suscipit! Adipisci architecto eius labore minima neque, repudiandae?
+        </item>
+        <item>6Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquam at, autem dolore, dolores ducimus eaque id maxime odit officia praesentium repudiandae suscipit! Adipisci architecto eius labore minima neque, repudiandae?
+        </item>
+
+    </string-array>
+</resources>
