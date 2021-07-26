@@ -10,13 +10,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
 public class NotesContentFragment extends Fragment {
 
     public static final String ARG_INDEX = "index";
-    public static final int DEF_VALUE = 0;
 
     private int index;
 
@@ -37,6 +38,7 @@ public class NotesContentFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setReenterTransition(true);
         if (getArguments() != null) {
             index = getArguments().getInt(ARG_INDEX);
         }
@@ -56,10 +58,15 @@ public class NotesContentFragment extends Fragment {
     }
 
     private void initTextView(View view) {
-        TextView textview = view.findViewById(R.id.notes_content);
+        EditText editText = view.findViewById(R.id.notes_content);
 
         String[] notes = getResources().getStringArray(R.array.notes_content);
-        textview.setText(notes[index]);
+        editText.setText(notes[index]);
+
+        EditText editTextHeadLine = view.findViewById(R.id.notes_headline);
+        String[] notesHeadlines = getResources().getStringArray(R.array.notes);
+        editTextHeadLine.setText(notesHeadlines[index]);
 
     }
+
 }
