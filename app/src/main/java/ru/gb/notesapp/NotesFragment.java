@@ -1,5 +1,6 @@
 package ru.gb.notesapp;
 
+import android.app.Activity;
 import android.app.FragmentManagerNonConfig;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -13,10 +14,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class NotesFragment extends Fragment {
@@ -69,11 +74,31 @@ public class NotesFragment extends Fragment {
                 showNotesContent(finalIndex);
                 updateText(finalIndex);
             });
+            textView.setOnLongClickListener(v -> {
+                initPopupMenu(v);
+                updateText(finalIndex);
+                return true;
+            });
 
             linearLayout.addView(textView);
 
         }
     }
+    private void initPopupMenu(View view) {
+        Activity activity = requireActivity();
+        PopupMenu popupMenu = new PopupMenu(activity, view);
+        activity.getMenuInflater().inflate(R.menu.popup, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(item -> {
+            if(item.getItemId() == R.id.item1_popup){
+                Toast.makeText(getContext(),"Note has been deleted", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            return false;
+        });
+        popupMenu.show();
+
+    }
+
 
     private void showNotesContent(int finalIndex) {
         if (isLand) {
@@ -105,7 +130,6 @@ public class NotesFragment extends Fragment {
                 .beginTransaction()
                 .replace(R.id.notes_content_fragments, fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .addToBackStack(null)
                 .commit();
     }
 

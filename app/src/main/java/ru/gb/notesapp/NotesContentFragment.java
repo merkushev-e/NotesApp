@@ -1,6 +1,5 @@
 package ru.gb.notesapp;
 
-import android.content.res.TypedArray;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,11 +7,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class NotesContentFragment extends Fragment {
@@ -48,6 +49,7 @@ public class NotesContentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_notes_content, container, false);
     }
 
@@ -69,4 +71,18 @@ public class NotesContentFragment extends Fragment {
 
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+         inflater.inflate(R.menu.notes_content_fragment,menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull  MenuItem item) {
+        if(item.getItemId() == R.id.delete_note){
+            Toast.makeText(getContext(),"This note has been deleted", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
