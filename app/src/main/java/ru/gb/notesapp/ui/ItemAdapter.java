@@ -9,20 +9,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import ru.gb.notesapp.Data.Card;
+import ru.gb.notesapp.Data.CardSource;
 import ru.gb.notesapp.NotesFragment;
 import ru.gb.notesapp.R;
 
 public class ItemAdapter extends RecyclerView.Adapter <ItemAdapter.ItemViewHolder> {
 
-    private String[] dataSource;
+//    private String[] dataSource;
+    public static final String TAG = "Adapter";
+    private CardSource dataSource;
     private OnItemClickListener listener;
     private OnItemLongClickListener longClickListener;
+
 
     public void setLongClickListener(OnItemLongClickListener longClickListener) {
         this.longClickListener = longClickListener;
     }
 
-    public ItemAdapter(String[] dataSource) {
+    public ItemAdapter(CardSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -39,12 +44,14 @@ public class ItemAdapter extends RecyclerView.Adapter <ItemAdapter.ItemViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull  ItemAdapter.ItemViewHolder holder, int position) {
-        holder.getTextView().setText(dataSource[position]);
+//        holder.getTextView().setText(dataSource);
+        holder.setData(dataSource.getCard(position));
+
     }
 
     @Override
     public int getItemCount() {
-        return dataSource.length;
+        return dataSource.size();
     }
 
 
@@ -67,6 +74,10 @@ public class ItemAdapter extends RecyclerView.Adapter <ItemAdapter.ItemViewHolde
         public TextView getTextView() {
             return textView;
         }
+
+        public void setData(Card cardData){
+            textView.setText(cardData.getNotes());
+        }
     }
     public interface OnItemClickListener{
         void onItemClick(int position);
@@ -75,5 +86,7 @@ public class ItemAdapter extends RecyclerView.Adapter <ItemAdapter.ItemViewHolde
     public interface OnItemLongClickListener{
         void onItemLongClick(int position);
     }
+
+
 
 }
