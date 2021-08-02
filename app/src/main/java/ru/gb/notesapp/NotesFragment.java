@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import ru.gb.notesapp.ui.ItemAdapter;
 
 
 public class NotesFragment extends Fragment {
@@ -40,7 +44,11 @@ public class NotesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notes, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_recycleview, container, false);
+        initList(view);
+        return view;
+//        return inflater.inflate(R.layout.fragment_notes, container, false);// Поменять тут
 
     }
 
@@ -58,31 +66,40 @@ public class NotesFragment extends Fragment {
             showNotesContentLand(DEFAULT_INDEX);
         }
 
-        initList(view);
+//        initList(view);
     }
 
     private void initList(View view) {
-        LinearLayout linearLayout = view.findViewById(R.id.notes_container);
+
+        RecyclerView recyclerView = getActivity().findViewById(R.id.recycler_view_lines);
         String[] notes = getResources().getStringArray(R.array.notes);
-        for (int i = 0; i < notes.length; i++) {
-            TextView textView = new TextView(getContext());
-            textView.setText(notes[i]);
-            textView.setTextSize(30);
-            textView.setPadding(20, 5, 20, 5);
-            final int finalIndex = i;
-            textView.setOnClickListener(v -> {
-                showNotesContent(finalIndex);
-                updateText(finalIndex);
-            });
-            textView.setOnLongClickListener(v -> {
-                initPopupMenu(v);
-                updateText(finalIndex);
-                return true;
-            });
+        ItemAdapter adapter = new ItemAdapter(notes);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
 
-            linearLayout.addView(textView);
+//
+//        LinearLayout linearLayout = view.findViewById(R.id.notes_container);
 
-        }
+//        for (int i = 0; i < notes.length; i++) {
+//            TextView textView = new TextView(getContext());
+//            textView.setText(notes[i]);
+//            textView.setTextSize(30);
+//            textView.setPadding(20, 5, 20, 5);
+//            final int finalIndex = i;
+//            textView.setOnClickListener(v -> {
+//                showNotesContent(finalIndex);
+//                updateText(finalIndex);
+//            });
+//            textView.setOnLongClickListener(v -> {
+//                initPopupMenu(v);
+//                updateText(finalIndex);
+//                return true;
+//            });
+//
+//            linearLayout.addView(textView);
+//
+//        }
     }
     private void initPopupMenu(View view) {
         Activity activity = requireActivity();
