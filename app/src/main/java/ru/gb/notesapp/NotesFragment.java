@@ -66,17 +66,28 @@ public class NotesFragment extends Fragment {
             showNotesContentLand(DEFAULT_INDEX);
         }
 
-//        initList(view);
+
     }
 
     private void initList(View view) {
 
-        RecyclerView recyclerView = getActivity().findViewById(R.id.recycler_view_lines);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_lines);
         String[] notes = getResources().getStringArray(R.array.notes);
         ItemAdapter adapter = new ItemAdapter(notes);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        adapter.setListener(position -> {
+            Toast.makeText(getContext(), "Click t0" + notes[position], Toast.LENGTH_SHORT).show();
+            showNotesContent(position);
+//                updateText(position);
+        });
+        adapter.setLongClickListener(new ItemAdapter.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(int position) {
+                initPopupMenu();
+            }
+        });
 
 //
 //        LinearLayout linearLayout = view.findViewById(R.id.notes_container);
@@ -101,9 +112,9 @@ public class NotesFragment extends Fragment {
 //
 //        }
     }
-    private void initPopupMenu(View view) {
+    public  void initPopupMenu() {
         Activity activity = requireActivity();
-        PopupMenu popupMenu = new PopupMenu(activity, view);
+        PopupMenu popupMenu = new PopupMenu(activity, getView());
         activity.getMenuInflater().inflate(R.menu.popup, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(item -> {
             if(item.getItemId() == R.id.item1_popup){
@@ -124,6 +135,8 @@ public class NotesFragment extends Fragment {
             showNotesContentPort(finalIndex);
         }
     }
+
+
 
     private void showNotesContentPort(int index) {
 
