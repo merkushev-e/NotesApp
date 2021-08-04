@@ -35,17 +35,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private Fragment getVisibleFragment(FragmentManager fragmentManager) {
-        List<Fragment> fragments = fragmentManager.getFragments();
-        int countFragments = fragments.size();
-        for (int i = countFragments - 1; i >= 0; i--) {
-            Fragment fragment = fragments.get(i);
-            if (fragment.isVisible())
-                return fragment;
-        }
-        return null;
-
-    }
 
 
     private void initView() {
@@ -78,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean navigateFragment(int id) {
         switch (id) {
             case R.id.action_settings:
-                Toast.makeText(getApplicationContext(), "Setings", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_main:
                 Toast.makeText(getApplicationContext(), "About", Toast.LENGTH_SHORT).show();
@@ -88,41 +77,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.add_note) {
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "New note has been added", Toast.LENGTH_SHORT);
-            toast.show();
-        } else if (id == R.id.delete_all) {
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "All notes have been deleted", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        int id = item.getItemId();
+//        if (id == R.id.add_note) {
+//            Toast toast = Toast.makeText(getApplicationContext(),
+//                    "New note has been added", Toast.LENGTH_SHORT);
+//            toast.show();
+//        } else if (id == R.id.delete_all) {
+//            Toast toast = Toast.makeText(getApplicationContext(),
+//                    "All notes have been deleted", Toast.LENGTH_SHORT);
+//            toast.show();
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-
-        MenuItem search = menu.findItem(R.id.app_bar_search);
-        SearchView searchText = (SearchView) search.getActionView();
-        searchText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return true;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu, menu);
+//
+//        MenuItem search = menu.findItem(R.id.app_bar_search);
+//        SearchView searchText = (SearchView) search.getActionView();
+//        searchText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return true;
+//            }
+//        });
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
     @Override
     public void onBackPressed() {
@@ -137,8 +126,6 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragmentInFrame = (Fragment) getSupportFragmentManager()
                 .findFragmentById(R.id.notes_fragments);
 
-        Fragment fragmentInFrameSecond = (Fragment) getSupportFragmentManager()
-                .findFragmentById(R.id.notes_fragments_container);
 
         boolean isLand = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
@@ -148,6 +135,19 @@ public class MainActivity extends AppCompatActivity {
         if (isLand) {
             super.onBackPressed();
         }
+    }
+
+
+    private Fragment getVisibleFragment(FragmentManager fragmentManager) {
+        List<Fragment> fragments = fragmentManager.getFragments();
+        int countFragments = fragments.size();
+        for (int i = countFragments - 1; i >= 0; i--) {
+            Fragment fragment = fragments.get(i);
+            if (fragment.isVisible())
+                return fragment;
+        }
+        return null;
+
     }
 
 }

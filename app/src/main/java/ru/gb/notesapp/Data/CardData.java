@@ -1,9 +1,9 @@
 package ru.gb.notesapp.Data;
 
-public class Card {
+public class CardData {
     private String notes;
 
-    public Card(String notes) {
+    public CardData(String notes) {
         this.notes = notes;
     }
 

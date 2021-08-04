@@ -1,7 +1,11 @@
 package ru.gb.notesapp.Data;
 
 public interface CardSource {
-    Card getCard(int position);
+    CardData getCard(int position);
     int size();
+    void deleteCardData(int position);
+    void updateCardData(int position, CardData cardData);
+    void addCardData(CardData cardData);
+    void clearCardData();
 }
 
