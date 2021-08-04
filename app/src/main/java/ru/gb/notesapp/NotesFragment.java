@@ -1,5 +1,7 @@
 package ru.gb.notesapp;
 
+import android.app.Activity;
+import android.app.FragmentManagerNonConfig;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -8,18 +10,32 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import ru.gb.notesapp.Data.Card;
+import ru.gb.notesapp.Data.CardSource;
+import ru.gb.notesapp.Data.CardsSourceImpl;
+import ru.gb.notesapp.ui.ItemAdapter;
 
 
 public class NotesFragment extends Fragment {
 
     public static final int DEFAULT_INDEX = 0;
+    public static final String NOTES_FRAGMENT = "NotesFragment";
+    public static final String NOTES_CONTENT = "Notes_Content";
     private boolean isLand = false;
 
     public NotesFragment() {
@@ -31,38 +47,84 @@ public class NotesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notes, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_recycleview, container, false);
+        initList(view);
+        return view;
+
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.addToBackStack(NOTES_FRAGMENT);
+        fragmentTransaction.commit();
+
         isLand = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         if (isLand) {
             showNotesContentLand(DEFAULT_INDEX);
         }
-        initList(view);
+
+
     }
 
     private void initList(View view) {
-        LinearLayout linearLayout = view.findViewById(R.id.notes_container);
-        String[] notes = getResources().getStringArray(R.array.notes);
-        for (int i = 0; i < notes.length; i++) {
-            TextView textView = new TextView(getContext());
-            textView.setText(notes[i]);
-            textView.setTextSize(30);
-            textView.setPadding(20, 5, 20, 5);
-            final int finalIndex = i;
-            textView.setOnClickListener(v -> {
-                showNotesContent(finalIndex);
-                updateText(finalIndex);
-            });
 
-            linearLayout.addView(textView);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_lines);
+        CardSource data = new CardsSourceImpl(getResources()).init();
 
-        }
+        ItemAdapter adapter = new ItemAdapter(data);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        adapter.setListener(position -> {
+            showNotesContent(position);
+//                updateText(position);
+        });
+        adapter.setLongClickListener(position -> initPopupMenu());
+
+//
+//        LinearLayout linearLayout = view.findViewById(R.id.notes_container);
+//        for (int i = 0; i < notes.length; i++) {
+//            TextView textView = new TextView(getContext());
+//            textView.setText(notes[i]);
+//            textView.setTextSize(30);
+//            textView.setPadding(20, 5, 20, 5);
+//            final int finalIndex = i;
+//            textView.setOnClickListener(v -> {
+//                showNotesContent(finalIndex);
+//                updateText(finalIndex);
+//            });
+//            textView.setOnLongClickListener(v -> {
+//                initPopupMenu(v);
+//                updateText(finalIndex);
+//                return true;
+//            });
+//
+//            linearLayout.addView(textView);
+//
+//        }
     }
+
+    public void initPopupMenu() {
+        Activity activity = requireActivity();
+        PopupMenu popupMenu = new PopupMenu(activity, getView());
+        activity.getMenuInflater().inflate(R.menu.popup, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.item1_popup) {
+                Toast.makeText(getContext(), "Note has been deleted", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            return false;
+        });
+        popupMenu.show();
+
+    }
+
 
     private void showNotesContent(int finalIndex) {
         if (isLand) {
@@ -72,10 +134,18 @@ public class NotesFragment extends Fragment {
         }
     }
 
-    private void showNotesContentPort(int finalIndex) {
-        Intent intent = new Intent(getActivity(), NotesContentActivity.class);
-        intent.putExtra(NotesContentFragment.ARG_INDEX, finalIndex);
-        startActivity(intent);
+
+    private void showNotesContentPort(int index) {
+
+
+        NotesContentFragment fragment = NotesContentFragment.newInstance(index);
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.notes_fragments_container, fragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .addToBackStack(null)
+                .commit();
+
 
     }
 
@@ -97,5 +167,6 @@ public class NotesFragment extends Fragment {
         }
         ((TextView) linearLayout.getChildAt(index)).setBackgroundColor(getResources().getColor(R.color.secondaryLightColor));
     }
+
 
 }
