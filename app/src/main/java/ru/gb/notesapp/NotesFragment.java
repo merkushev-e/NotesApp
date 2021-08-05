@@ -38,6 +38,7 @@ public class NotesFragment extends Fragment {
     public static final String NOTES_FRAGMENT = "NotesFragment";
     public static final String NOTES_CONTENT = "Notes_Content";
     private boolean isLand = false;
+    public static int currentPosition;
 
     private CardSource data;
     private ItemAdapter adapter;
@@ -100,7 +101,7 @@ public class NotesFragment extends Fragment {
             showNotesContent(position);
 //                updateText(position);
         });
-//        adapter.setLongClickListener(position -> initPopupMenu());
+        adapter.setLongClickListener(position -> {});
 
     }
 
@@ -136,8 +137,11 @@ public class NotesFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.item1_popup) {
-            Toast.makeText(getContext(), "Note has been deleted", Toast.LENGTH_SHORT).show();
+        if (item.getItemId() == R.id.item1_context_menu) {
+            currentPosition = adapter.getCurrentPosition();
+            data.deleteCardData(currentPosition);
+            adapter.notifyItemRemoved(currentPosition);
+            Toast.makeText(getContext(), "Note has been deleted" + currentPosition, Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onContextItemSelected(item);

@@ -22,11 +22,13 @@ public class ItemAdapter extends RecyclerView.Adapter <ItemAdapter.ItemViewHolde
     private OnItemClickListener listener;
     private OnItemLongClickListener longClickListener;
     private final Fragment fragment;
+    private int currentPosition;
 
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
 
-
-
-    public ItemAdapter(CardSource dataSource,Fragment fragment) {
+    public ItemAdapter(CardSource dataSource, Fragment fragment) {
         this.dataSource = dataSource;
         this.fragment = fragment;
     }
@@ -73,15 +75,22 @@ public class ItemAdapter extends RecyclerView.Adapter <ItemAdapter.ItemViewHolde
                 listener.onItemClick(getAdapterPosition());
             });
             textView.setOnLongClickListener(v -> {
-                longClickListener.onItemLongClick(getAdapterPosition());
-                return true;
+//                longClickListener.onItemLongClick(getAdapterPosition());
+                currentPosition = getLayoutPosition();
+                itemView.showContextMenu(20,20);
+                return false;
             });
+
 
         }
 
         private void registerContextMenu(View itemView) {
             if (fragment != null){
                 fragment.registerForContextMenu(itemView);
+                itemView.setOnLongClickListener(v -> {
+                    currentPosition = getLayoutPosition();
+                    return false;
+                });
             }
 
         }
