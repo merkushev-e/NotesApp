@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import ru.gb.notesapp.Data.CardData;
+import ru.gb.notesapp.Data.CardSource;
+import ru.gb.notesapp.Data.CardsSourceImpl;
 
 
 public class NotesContentFragment extends Fragment {
@@ -60,16 +65,24 @@ public class NotesContentFragment extends Fragment {
     }
 
     private void initTextView(View view) {
-        EditText editText = view.findViewById(R.id.notes_content);
+        CardsSourceImpl cardsSource = new CardsSourceImpl(getResources());
+        CardsSourceImpl dataSource = cardsSource.init();
+        CardData cardData = dataSource.getCard(index);
+        CardData cardDataContent = dataSource.getCardContent(index);
 
-        String[] notes = getResources().getStringArray(R.array.notes_content);
-        editText.setText(notes[index]);
+        EditText editText = view.findViewById(R.id.notes_content);
+//        String[] notes = getResources().getStringArray(R.array.notes_content);
+        editText.setText(cardDataContent.getNotes());
 
         EditText editTextHeadLine = view.findViewById(R.id.notes_headline);
-        String[] notesHeadlines = getResources().getStringArray(R.array.notes);
-        editTextHeadLine.setText(notesHeadlines[index]);
+//        String[] notesHeadlines = getResources().getStringArray(R.array.notes);
+//        editTextHeadLine.setText(notesHeadlines[index]);
+        editTextHeadLine.setText(cardData.getNotes());
+
+
 
     }
+
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
