@@ -115,6 +115,7 @@ public class NotesFragment extends Fragment {
         switch (item.getItemId()){
             case R.id.add_note:
                 data.addCardData(new CardData("Simple notes"));
+                data.addCardContentData(new CardData("Simple notes"));
                 adapter.notifyItemInserted(data.size()-1);
                 recyclerView.scrollToPosition(data.size()-1);
                 return true;
@@ -184,7 +185,6 @@ public class NotesFragment extends Fragment {
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack(null)
                 .commit();
-
 
     }
 

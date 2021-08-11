@@ -14,8 +14,8 @@ public class CardsSourceImpl implements CardSource {
     private Resources resources;
 
     public CardsSourceImpl(Resources resources) {
-        dataSource = new ArrayList<>(7);
-        dataSourceContent = new ArrayList<>(7);
+        dataSource = new ArrayList<>(10);
+        dataSourceContent = new ArrayList<>(10);
         this.resources = resources;
     }
 
@@ -56,6 +56,11 @@ public class CardsSourceImpl implements CardSource {
     @Override
     public void addCardData(CardData cardData) {
         dataSource.add(cardData);
+    }
+
+    @Override
+    public void addCardContentData(CardData cardData) {
+        dataSourceContent.add(cardData);
     }
 
     @Override

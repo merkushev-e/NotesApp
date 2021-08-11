@@ -7,6 +7,7 @@ public interface CardSource {
     void deleteCardData(int position);
     void updateCardData(int position, CardData cardData);
     void addCardData(CardData cardData);
+    void addCardContentData(CardData cardData);
     void clearCardData();
 }
 

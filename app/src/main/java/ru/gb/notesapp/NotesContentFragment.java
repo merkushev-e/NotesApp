@@ -24,6 +24,11 @@ import ru.gb.notesapp.Data.CardsSourceImpl;
 public class NotesContentFragment extends Fragment {
 
     public static final String ARG_INDEX = "index";
+    CardData cardData;
+    CardData cardDataContent;
+    CardsSourceImpl dataSource;
+    CardsSourceImpl cardsSource;
+
 
     private int index;
 
@@ -65,10 +70,10 @@ public class NotesContentFragment extends Fragment {
     }
 
     private void initTextView(View view) {
-        CardsSourceImpl cardsSource = new CardsSourceImpl(getResources());
-        CardsSourceImpl dataSource = cardsSource.init();
-        CardData cardData = dataSource.getCard(index);
-        CardData cardDataContent = dataSource.getCardContent(index);
+        cardsSource = new CardsSourceImpl(getResources());
+        dataSource = cardsSource.init();
+        cardData = dataSource.getCard(index);
+        cardDataContent = dataSource.getCardContent(index);
 
         EditText editText = view.findViewById(R.id.notes_content);
 //        String[] notes = getResources().getStringArray(R.array.notes_content);
