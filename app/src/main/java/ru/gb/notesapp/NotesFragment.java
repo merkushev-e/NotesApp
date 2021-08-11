@@ -177,11 +177,10 @@ public class NotesFragment extends Fragment {
 
     private void showNotesContentPort(int index) {
 
-
         NotesContentFragment fragment = NotesContentFragment.newInstance(index);
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.notes_fragments_container, fragment)
+                .add(R.id.notes_fragments_container,fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack(null)
                 .commit();
