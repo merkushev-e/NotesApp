@@ -7,11 +7,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import ru.gb.notesapp.Data.Card;
+import ru.gb.notesapp.Data.CardData;
 import ru.gb.notesapp.Data.CardSource;
-import ru.gb.notesapp.NotesFragment;
 import ru.gb.notesapp.R;
 
 public class ItemAdapter extends RecyclerView.Adapter <ItemAdapter.ItemViewHolder> {
@@ -21,18 +21,25 @@ public class ItemAdapter extends RecyclerView.Adapter <ItemAdapter.ItemViewHolde
     private CardSource dataSource;
     private OnItemClickListener listener;
     private OnItemLongClickListener longClickListener;
+    private final Fragment fragment;
+    private int currentPosition;
 
-
-    public void setLongClickListener(OnItemLongClickListener longClickListener) {
-        this.longClickListener = longClickListener;
+    public int getCurrentPosition() {
+        return currentPosition;
     }
 
-    public ItemAdapter(CardSource dataSource) {
+    public ItemAdapter(CardSource dataSource, Fragment fragment) {
         this.dataSource = dataSource;
+        this.fragment = fragment;
     }
+
 
     public void setListener(@Nullable OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setLongClickListener(OnItemLongClickListener longClickListener) {
+        this.longClickListener = longClickListener;
     }
 
     @NonNull
@@ -62,31 +69,48 @@ public class ItemAdapter extends RecyclerView.Adapter <ItemAdapter.ItemViewHolde
         public ItemViewHolder(@NonNull  View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.textView);
+            registerContextMenu(itemView);
+
             textView.setOnClickListener(v -> {
                 listener.onItemClick(getAdapterPosition());
             });
             textView.setOnLongClickListener(v -> {
-                longClickListener.onItemLongClick(getAdapterPosition());
-                return true;
+//                longClickListener.onItemLongClick(getAdapterPosition());
+                currentPosition = getLayoutPosition();
+                itemView.showContextMenu(20,20);
+                return false;
             });
+
+
+        }
+
+        private void registerContextMenu(View itemView) {
+            if (fragment != null){
+                fragment.registerForContextMenu(itemView);
+                itemView.setOnLongClickListener(v -> {
+                    currentPosition = getLayoutPosition();
+                    return false;
+                });
+            }
+
         }
 
         public TextView getTextView() {
             return textView;
         }
-
-        public void setData(Card cardData){
+        public void setData(CardData cardData){
             textView.setText(cardData.getNotes());
         }
     }
+
+
     public interface OnItemClickListener{
         void onItemClick(int position);
     }
 
+
     public interface OnItemLongClickListener{
         void onItemLongClick(int position);
     }
-
-
 
 }

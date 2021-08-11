@@ -1,8 +1,6 @@
 package ru.gb.notesapp;
 
 import android.app.Activity;
-import android.app.FragmentManagerNonConfig;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,11 +10,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import ru.gb.notesapp.Data.Card;
+import ru.gb.notesapp.Data.CardData;
 import ru.gb.notesapp.Data.CardSource;
 import ru.gb.notesapp.Data.CardsSourceImpl;
 import ru.gb.notesapp.ui.ItemAdapter;
@@ -37,6 +38,13 @@ public class NotesFragment extends Fragment {
     public static final String NOTES_FRAGMENT = "NotesFragment";
     public static final String NOTES_CONTENT = "Notes_Content";
     private boolean isLand = false;
+    public static int currentPosition;
+
+    private CardSource data;
+    private ItemAdapter adapter;
+    private RecyclerView recyclerView;
+
+
 
     public NotesFragment() {
 
@@ -46,7 +54,6 @@ public class NotesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_recycleview, container, false);
         initList(view);
@@ -74,56 +81,89 @@ public class NotesFragment extends Fragment {
 
     private void initList(View view) {
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_lines);
-        CardSource data = new CardsSourceImpl(getResources()).init();
+        recyclerView = view.findViewById(R.id.recycler_view_lines);
+        CardsSourceImpl cardsSource = new CardsSourceImpl(getResources());
+        data = cardsSource.init() ;
 
-        ItemAdapter adapter = new ItemAdapter(data);
+        setHasOptionsMenu(true);
+
+        adapter = new ItemAdapter(data,this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(),LinearLayoutManager.VERTICAL);
+        itemDecoration.setDrawable(getResources().getDrawable(R.drawable.separator,null));
+        recyclerView.addItemDecoration(itemDecoration);
+
         adapter.setListener(position -> {
             showNotesContent(position);
 //                updateText(position);
         });
-        adapter.setLongClickListener(position -> initPopupMenu());
+        adapter.setLongClickListener(position -> {});
 
-//
-//        LinearLayout linearLayout = view.findViewById(R.id.notes_container);
-//        for (int i = 0; i < notes.length; i++) {
-//            TextView textView = new TextView(getContext());
-//            textView.setText(notes[i]);
-//            textView.setTextSize(30);
-//            textView.setPadding(20, 5, 20, 5);
-//            final int finalIndex = i;
-//            textView.setOnClickListener(v -> {
-//                showNotesContent(finalIndex);
-//                updateText(finalIndex);
-//            });
-//            textView.setOnLongClickListener(v -> {
-//                initPopupMenu(v);
-//                updateText(finalIndex);
-//                return true;
-//            });
-//
-//            linearLayout.addView(textView);
-//
-//        }
     }
 
-    public void initPopupMenu() {
-        Activity activity = requireActivity();
-        PopupMenu popupMenu = new PopupMenu(activity, getView());
-        activity.getMenuInflater().inflate(R.menu.popup, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.item1_popup) {
-                Toast.makeText(getContext(), "Note has been deleted", Toast.LENGTH_SHORT).show();
+    @Override
+    public void onCreateOptionsMenu(@NonNull  Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull  MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.add_note:
+                data.addCardData(new CardData("Simple notes"));
+                adapter.notifyItemInserted(data.size()-1);
+                recyclerView.scrollToPosition(data.size()-1);
                 return true;
-            }
-            return false;
-        });
-        popupMenu.show();
+            case R.id.delete_all:
+                data.clearCardData();
+                adapter.notifyDataSetChanged();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull  ContextMenu menu, @NonNull  View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = requireActivity().getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
 
     }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.item1_context_menu) {
+            currentPosition = adapter.getCurrentPosition();
+            data.deleteCardData(currentPosition);
+            adapter.notifyItemRemoved(currentPosition);
+            Toast.makeText(getContext(), "Note has been deleted" + currentPosition, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+//    public void initPopupMenu() {
+//        Activity activity = requireActivity();
+//        PopupMenu popupMenu = new PopupMenu(activity, getView());
+//        activity.getMenuInflater().inflate(R.menu.context_menu, popupMenu.getMenu());
+//        popupMenu.setOnMenuItemClickListener(item -> {
+//            if (item.getItemId() == R.id.item1_popup) {
+//                Toast.makeText(getContext(), "Note has been deleted", Toast.LENGTH_SHORT).show();
+//                return true;
+//            }
+//            return false;
+//        });
+//        popupMenu.show();
+//
+//    }
+
+
+
 
 
     private void showNotesContent(int finalIndex) {
