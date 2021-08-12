@@ -70,8 +70,9 @@ public class NotesContentFragment extends Fragment {
     }
 
     private void initTextView(View view) {
-        cardsSource = new CardsSourceImpl(getResources());
-        dataSource = cardsSource.init();
+        cardsSource = CardsSourceImpl.getInstance(getResources());
+//        cardsSource = new CardsSourceImpl(getResources());
+        dataSource = cardsSource.getData();
         cardData = dataSource.getCard(index);
         cardDataContent = dataSource.getCardContent(index);
 

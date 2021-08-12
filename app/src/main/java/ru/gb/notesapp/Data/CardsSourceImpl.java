@@ -12,20 +12,30 @@ public class CardsSourceImpl implements CardSource {
     private List<CardData> dataSource;
     private List<CardData> dataSourceContent;
     private Resources resources;
+    private static CardsSourceImpl instance;
 
-    public CardsSourceImpl(Resources resources) {
+
+    private CardsSourceImpl(Resources resources) {
         dataSource = new ArrayList<>(10);
         dataSourceContent = new ArrayList<>(10);
         this.resources = resources;
-    }
-
-    public CardsSourceImpl init() {
         String[] notes = resources.getStringArray(R.array.notes);
         String[] notesContent = resources.getStringArray(R.array.notes_content);
         for (int i = 0; i < notes.length; i++) {
             dataSource.add(new CardData(notes[i]));
             dataSourceContent.add(new CardData(notesContent[i]));
         }
+    }
+
+    public static CardsSourceImpl getInstance(Resources resources) {
+        if (instance == null) {
+            instance = new CardsSourceImpl(resources);
+        }
+        return instance;
+    }
+
+
+    public CardsSourceImpl getData() {
         return this;
     }
 

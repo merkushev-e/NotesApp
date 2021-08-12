@@ -82,8 +82,9 @@ public class NotesFragment extends Fragment {
     private void initList(View view) {
 
         recyclerView = view.findViewById(R.id.recycler_view_lines);
-        CardsSourceImpl cardsSource = new CardsSourceImpl(getResources());
-        data = cardsSource.init() ;
+//        CardsSourceImpl cardsSource = new CardsSourceImpl(getResources());
+        CardsSourceImpl cardsSource = CardsSourceImpl.getInstance(getResources());
+        data = cardsSource.getData() ;
 
         setHasOptionsMenu(true);
 
