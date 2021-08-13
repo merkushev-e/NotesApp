@@ -26,9 +26,13 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.UUID;
+
 import ru.gb.notesapp.Data.CardData;
 import ru.gb.notesapp.Data.CardSource;
+import ru.gb.notesapp.Data.CardsSourceFirebaseImpl;
 import ru.gb.notesapp.Data.CardsSourceImpl;
+import ru.gb.notesapp.Data.CardsSourceResponse;
 import ru.gb.notesapp.ui.ItemAdapter;
 
 
@@ -83,8 +87,12 @@ public class NotesFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recycler_view_lines);
 //        CardsSourceImpl cardsSource = new CardsSourceImpl(getResources());
-        CardsSourceImpl cardsSource = CardsSourceImpl.getInstance(getResources());
-        data = cardsSource.getData() ;
+//        CardsSourceImpl cardsSource = CardsSourceImpl.getInstance(getResources());
+        CardSource cardsSource =  CardsSourceFirebaseImpl.getInstance();
+
+        cardsSource.init(cardsData -> adapter.notifyDataSetChanged());
+//        data = cardsSource.getData() ; //Сюда поставить иницаил и колбек cardsData -> adapter.notifyDataSetChanged());
+        data = cardsSource;
 
         setHasOptionsMenu(true);
 
@@ -115,8 +123,15 @@ public class NotesFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull  MenuItem item) {
         switch (item.getItemId()){
             case R.id.add_note:
-                data.addCardData(new CardData("Simple notes"));
-                data.addCardContentData(new CardData("Simple notes"));
+                CardData cardData = new CardData("Simple notes");
+                CardData cardContentData = new CardData("Add Text");
+
+                cardData.setId(UUID.randomUUID().toString());
+                cardContentData.setId(UUID.randomUUID().toString());
+                data.addCardData(cardData);
+                data.addCardContentData(cardContentData);
+//                data.addCardData(new CardData("Simple notes"));
+//                data.addCardContentData(new CardData("Simple notes"));
                 adapter.notifyItemInserted(data.size()-1);
                 recyclerView.scrollToPosition(data.size()-1);
                 return true;

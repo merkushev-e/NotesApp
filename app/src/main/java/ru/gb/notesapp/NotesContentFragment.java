@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import ru.gb.notesapp.Data.CardData;
 import ru.gb.notesapp.Data.CardSource;
+import ru.gb.notesapp.Data.CardsSourceFirebaseImpl;
 import ru.gb.notesapp.Data.CardsSourceImpl;
 
 
@@ -70,11 +71,12 @@ public class NotesContentFragment extends Fragment {
     }
 
     private void initTextView(View view) {
-        cardsSource = CardsSourceImpl.getInstance(getResources());
+//        cardsSource = CardsSourceImpl.getInstance(getResources());
 //        cardsSource = new CardsSourceImpl(getResources());
-        dataSource = cardsSource.getData();
-        cardData = dataSource.getCard(index);
-        cardDataContent = dataSource.getCardContent(index);
+        CardSource cardsSource = CardsSourceFirebaseImpl.getInstance();
+//        dataSource = cardsSource.getData();
+        cardData = cardsSource.getCard(index);
+        cardDataContent = cardsSource.getCardContent(index);
 
         EditText editText = view.findViewById(R.id.notes_content);
 //        String[] notes = getResources().getStringArray(R.array.notes_content);

@@ -19,12 +19,12 @@ public class CardsSourceImpl implements CardSource {
         dataSource = new ArrayList<>(10);
         dataSourceContent = new ArrayList<>(10);
         this.resources = resources;
-        String[] notes = resources.getStringArray(R.array.notes);
-        String[] notesContent = resources.getStringArray(R.array.notes_content);
-        for (int i = 0; i < notes.length; i++) {
-            dataSource.add(new CardData(notes[i]));
-            dataSourceContent.add(new CardData(notesContent[i]));
-        }
+//        String[] notes = resources.getStringArray(R.array.notes);
+//        String[] notesContent = resources.getStringArray(R.array.notes_content);
+//        for (int i = 0; i < notes.length; i++) {
+//            dataSource.add(new CardData(notes[i]));
+//            dataSourceContent.add(new CardData(notesContent[i]));
+//        }
     }
 
     public static CardsSourceImpl getInstance(Resources resources) {
@@ -39,6 +39,22 @@ public class CardsSourceImpl implements CardSource {
         return this;
     }
 
+    @Override
+    public CardSource init(CardsSourceResponse cardsSourceResponse) {
+        String[] notes = resources.getStringArray(R.array.notes);
+        String[] notesContent = resources.getStringArray(R.array.notes_content);
+        for (int i = 0; i < notes.length; i++) {
+            dataSource.add(new CardData(notes[i]));
+            dataSourceContent.add(new CardData(notesContent[i]));
+        }
+
+        if (cardsSourceResponse != null){
+            cardsSourceResponse.initialized(this);
+        }
+
+        return null;
+    }
+
     public CardData getCard(int position) {
         return dataSource.get(position);
     }
@@ -50,21 +66,20 @@ public class CardsSourceImpl implements CardSource {
 
     @Override
     public int size() {
+
         return dataSource.size();
     }
 
     @Override
     public void deleteCardData(int position) {
         dataSource.remove(position);
+        dataSourceContent.remove(position);//Проверить
     }
 
-    @Override
-    public void updateCardData(int position, CardData cardData) {
-        dataSource.set(position, cardData);
-    }
 
     @Override
     public void addCardData(CardData cardData) {
+
         dataSource.add(cardData);
     }
 
