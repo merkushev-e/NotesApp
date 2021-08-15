@@ -41,16 +41,16 @@ public class CardsSourceImpl implements CardSource {
 
     @Override
     public CardSource init(CardsSourceResponse cardsSourceResponse) {
-        String[] notes = resources.getStringArray(R.array.notes);
-        String[] notesContent = resources.getStringArray(R.array.notes_content);
-        for (int i = 0; i < notes.length; i++) {
-            dataSource.add(new CardData(notes[i]));
-            dataSourceContent.add(new CardData(notesContent[i]));
-        }
-
-        if (cardsSourceResponse != null){
-            cardsSourceResponse.initialized(this);
-        }
+//        String[] notes = resources.getStringArray(R.array.notes);
+//        String[] notesContent = resources.getStringArray(R.array.notes_content);
+//        for (int i = 0; i < notes.length; i++) {
+//            dataSource.add(new CardData(notes[i]),);
+//            dataSourceContent.add(new CardData(notesContent[i]));
+//        }
+//
+//        if (cardsSourceResponse != null){
+//            cardsSourceResponse.initialized(this);
+//        }
 
         return null;
     }
@@ -58,11 +58,11 @@ public class CardsSourceImpl implements CardSource {
     public CardData getCard(int position) {
         return dataSource.get(position);
     }
-
-    @Override
-    public CardData getCardContent(int position) {
-        return dataSourceContent.get(position);
-    }
+//
+//    @Override
+//    public CardData getCardContent(int position) {
+//        return dataSourceContent.get(position);
+//    }
 
     @Override
     public int size() {
@@ -84,9 +84,14 @@ public class CardsSourceImpl implements CardSource {
     }
 
     @Override
-    public void addCardContentData(CardData cardData) {
-        dataSourceContent.add(cardData);
+    public void updateCardData(CardData cardData, int position) {
+
     }
+
+//    @Override
+//    public void addCardContentData(CardData cardData) {
+//        dataSourceContent.add(cardData);
+//    }
 
     @Override
     public void clearCardData() {

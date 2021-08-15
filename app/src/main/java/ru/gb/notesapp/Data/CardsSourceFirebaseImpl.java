@@ -29,7 +29,7 @@ public class CardsSourceFirebaseImpl implements CardSource{
     private CollectionReference collection = db.collection(CARDS_COLLECTION);
 
     private List<CardData> cardsData = new ArrayList<>();
-    private List<CardData> cardsContentData = new ArrayList<>();
+//    private List<CardData> cardsContentData = new ArrayList<>();
 
 
     private CardsSourceFirebaseImpl() {
@@ -49,12 +49,12 @@ public class CardsSourceFirebaseImpl implements CardSource{
                 .addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 cardsData = new ArrayList<>();
-                cardsContentData = new ArrayList<>();
+//                cardsContentData = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     CardData data = document.toObject(CardData.class);
                     data.setId(document.getId());
                     cardsData.add(data);
-                    cardsContentData.add(data);
+//                    cardsContentData.add(data);
                 }
 
 
@@ -75,11 +75,11 @@ public class CardsSourceFirebaseImpl implements CardSource{
     public CardData getCard(int position) {
         return cardsData.get(position);
     }
-
-    @Override
-    public CardData getCardContent(int position) {
-        return cardsContentData.get(position);
-    }
+//
+//    @Override
+//    public CardData getCardContent(int position) {
+//        return cardsContentData.get(position);
+//    }
 
     @Override
     public int size() {
@@ -113,9 +113,13 @@ public class CardsSourceFirebaseImpl implements CardSource{
     }
 
     @Override
-    public void addCardContentData(CardData cardData) {
+    public void updateCardData(CardData cardData, int position) {
+        collection.document(cardData.getId()).set(cardData);
+        cardsData.set(position,cardData);
+
 
     }
+
 
     @Override
     public void clearCardData() {

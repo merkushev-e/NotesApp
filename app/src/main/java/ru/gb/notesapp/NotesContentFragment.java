@@ -13,8 +13,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.UUID;
 
 import ru.gb.notesapp.Data.CardData;
 import ru.gb.notesapp.Data.CardSource;
@@ -28,7 +31,10 @@ public class NotesContentFragment extends Fragment {
     CardData cardData;
     CardData cardDataContent;
     CardsSourceImpl dataSource;
-    CardsSourceImpl cardsSource;
+    EditText editTextHeadLine;
+    CardSource cardsSource;
+
+    EditText editText;
 
 
     private int index;
@@ -73,21 +79,34 @@ public class NotesContentFragment extends Fragment {
     private void initTextView(View view) {
 //        cardsSource = CardsSourceImpl.getInstance(getResources());
 //        cardsSource = new CardsSourceImpl(getResources());
-        CardSource cardsSource = CardsSourceFirebaseImpl.getInstance();
+         cardsSource = CardsSourceFirebaseImpl.getInstance();
 //        dataSource = cardsSource.getData();
         cardData = cardsSource.getCard(index);
-        cardDataContent = cardsSource.getCardContent(index);
+//        cardDataContent = cardsSource.getCardContent(index);
 
-        EditText editText = view.findViewById(R.id.notes_content);
+        editText = view.findViewById(R.id.notes_content);
 //        String[] notes = getResources().getStringArray(R.array.notes_content);
-        editText.setText(cardDataContent.getNotes());
+        editText.setText(cardData.getText());
 
-        EditText editTextHeadLine = view.findViewById(R.id.notes_headline);
+        editTextHeadLine = view.findViewById(R.id.notes_headline);
 //        String[] notesHeadlines = getResources().getStringArray(R.array.notes);
 //        editTextHeadLine.setText(notesHeadlines[index]);
         editTextHeadLine.setText(cardData.getNotes());
 
+        Button button = view.findViewById(R.id.button);
+        button.setOnClickListener(v -> {
+            update();
+        });
 
+    }
+
+    private void update() {
+        CardData newCard = new CardData(
+                editTextHeadLine.getText().toString(),
+                editText.getText().toString()
+        );
+        newCard.setId(cardsSource.getCard(index).getId());
+        cardsSource.updateCardData(newCard,index);
 
     }
 

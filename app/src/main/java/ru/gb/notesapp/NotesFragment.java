@@ -123,13 +123,13 @@ public class NotesFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull  MenuItem item) {
         switch (item.getItemId()){
             case R.id.add_note:
-                CardData cardData = new CardData("Simple notes");
-                CardData cardContentData = new CardData("Add Text");
+                CardData cardData = new CardData("Simple notes","Add your text");
+//                CardData cardContentData = new CardData("Add Text");
 
                 cardData.setId(UUID.randomUUID().toString());
-                cardContentData.setId(UUID.randomUUID().toString());
+//                cardContentData.setId(UUID.randomUUID().toString());
                 data.addCardData(cardData);
-                data.addCardContentData(cardContentData);
+//                data.addCardContentData(cardContentData);
 //                data.addCardData(new CardData("Simple notes"));
 //                data.addCardContentData(new CardData("Simple notes"));
                 adapter.notifyItemInserted(data.size()-1);
