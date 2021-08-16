@@ -60,7 +60,8 @@ public class NotesFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_recycleview, container, false);
-        initList(view);
+
+            initList(view, savedInstanceState);
         return view;
 
 
@@ -75,6 +76,8 @@ public class NotesFragment extends Fragment {
         fragmentTransaction.addToBackStack(NOTES_FRAGMENT);
         fragmentTransaction.commit();
 
+
+
         isLand = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         if (isLand) {
             showNotesContentLand(DEFAULT_INDEX);
@@ -83,7 +86,9 @@ public class NotesFragment extends Fragment {
 
     }
 
-    private void initList(View view) {
+    private void initList(View view, Bundle savedInstanceState) {
+
+
 
         recyclerView = view.findViewById(R.id.recycler_view_lines);
 //        CardsSourceImpl cardsSource = new CardsSourceImpl(getResources());
@@ -91,8 +96,14 @@ public class NotesFragment extends Fragment {
         CardSource cardsSource =  CardsSourceFirebaseImpl.getInstance();
 
         cardsSource.init(cardsData -> adapter.notifyDataSetChanged());
-//        data = cardsSource.getData() ; //Сюда поставить иницаил и колбек cardsData -> adapter.notifyDataSetChanged());
+//        data = cardsSource.getData() ;
         data = cardsSource;
+
+//        if (savedInstanceState != null){
+//            data = savedInstanceState.getParcelable(NotesContentFragment.CURRENT_NOTE);
+//        } else {
+//            data = cardsSource;
+//        }
 
         setHasOptionsMenu(true);
 
@@ -111,6 +122,7 @@ public class NotesFragment extends Fragment {
 //                updateText(position);
         });
         adapter.setLongClickListener(position -> {});
+
 
     }
 
@@ -213,15 +225,15 @@ public class NotesFragment extends Fragment {
                 .commit();
     }
 
-
-    void updateText(int index) {
-        LinearLayout linearLayout = (LinearLayout) getView();
-        for (int i = 0; i < linearLayout.getChildCount(); i++) {
-            TextView textView = (TextView) linearLayout.getChildAt(i);
-            textView.setBackgroundColor(Color.WHITE);
-        }
-        ((TextView) linearLayout.getChildAt(index)).setBackgroundColor(getResources().getColor(R.color.secondaryLightColor));
-    }
+//
+//    void updateText(int index) {
+//        LinearLayout linearLayout = (LinearLayout) getView();
+//        for (int i = 0; i < linearLayout.getChildCount(); i++) {
+//            TextView textView = (TextView) linearLayout.getChildAt(i);
+//            textView.setBackgroundColor(Color.WHITE);
+//        }
+//        ((TextView) linearLayout.getChildAt(index)).setBackgroundColor(getResources().getColor(R.color.secondaryLightColor));
+//    }
 
 
 }

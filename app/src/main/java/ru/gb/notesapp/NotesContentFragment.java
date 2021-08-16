@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +29,8 @@ import ru.gb.notesapp.Data.CardsSourceImpl;
 public class NotesContentFragment extends Fragment {
 
     public static final String ARG_INDEX = "index";
+    public static final String CURRENT_NOTE = "current note";
+
     CardData cardData;
     CardData cardDataContent;
     CardsSourceImpl dataSource;
@@ -73,6 +76,7 @@ public class NotesContentFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         initTextView(view);
     }
 
@@ -108,6 +112,10 @@ public class NotesContentFragment extends Fragment {
         newCard.setId(cardsSource.getCard(index).getId());
         cardsSource.updateCardData(newCard,index);
 
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        fragmentManager.popBackStack();
+        requireActivity().recreate();
+
     }
 
 
@@ -125,4 +133,5 @@ public class NotesContentFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
