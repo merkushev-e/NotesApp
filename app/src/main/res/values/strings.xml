@@ -9,5 +9,10 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="save">Save</string>
+    <string name="message">Tap OK to delete</string>
+    <string name="tittle">Are you sure?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="message_note_deleted">Note has been deleted</string>
 
 </resources>
