@@ -26,9 +26,13 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.UUID;
+
 import ru.gb.notesapp.Data.CardData;
 import ru.gb.notesapp.Data.CardSource;
+import ru.gb.notesapp.Data.CardsSourceFirebaseImpl;
 import ru.gb.notesapp.Data.CardsSourceImpl;
+import ru.gb.notesapp.Data.CardsSourceResponse;
 import ru.gb.notesapp.ui.ItemAdapter;
 
 
@@ -56,7 +60,8 @@ public class NotesFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_recycleview, container, false);
-        initList(view);
+
+            initList(view, savedInstanceState);
         return view;
 
 
@@ -71,6 +76,8 @@ public class NotesFragment extends Fragment {
         fragmentTransaction.addToBackStack(NOTES_FRAGMENT);
         fragmentTransaction.commit();
 
+
+
         isLand = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         if (isLand) {
             showNotesContentLand(DEFAULT_INDEX);
@@ -79,11 +86,24 @@ public class NotesFragment extends Fragment {
 
     }
 
-    private void initList(View view) {
+    private void initList(View view, Bundle savedInstanceState) {
+
+
 
         recyclerView = view.findViewById(R.id.recycler_view_lines);
-        CardsSourceImpl cardsSource = new CardsSourceImpl(getResources());
-        data = cardsSource.init() ;
+//        CardsSourceImpl cardsSource = new CardsSourceImpl(getResources());
+//        CardsSourceImpl cardsSource = CardsSourceImpl.getInstance(getResources());
+        CardSource cardsSource =  CardsSourceFirebaseImpl.getInstance();
+
+        cardsSource.init(cardsData -> adapter.notifyDataSetChanged());
+//        data = cardsSource.getData() ;
+        data = cardsSource;
+
+//        if (savedInstanceState != null){
+//            data = savedInstanceState.getParcelable(NotesContentFragment.CURRENT_NOTE);
+//        } else {
+//            data = cardsSource;
+//        }
 
         setHasOptionsMenu(true);
 
@@ -103,6 +123,7 @@ public class NotesFragment extends Fragment {
         });
         adapter.setLongClickListener(position -> {});
 
+
     }
 
     @Override
@@ -114,7 +135,15 @@ public class NotesFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull  MenuItem item) {
         switch (item.getItemId()){
             case R.id.add_note:
-                data.addCardData(new CardData("Simple notes"));
+                CardData cardData = new CardData("Simple notes","Add your text");
+//                CardData cardContentData = new CardData("Add Text");
+
+                cardData.setId(UUID.randomUUID().toString());
+//                cardContentData.setId(UUID.randomUUID().toString());
+                data.addCardData(cardData);
+//                data.addCardContentData(cardContentData);
+//                data.addCardData(new CardData("Simple notes"));
+//                data.addCardContentData(new CardData("Simple notes"));
                 adapter.notifyItemInserted(data.size()-1);
                 recyclerView.scrollToPosition(data.size()-1);
                 return true;
@@ -177,15 +206,13 @@ public class NotesFragment extends Fragment {
 
     private void showNotesContentPort(int index) {
 
-
         NotesContentFragment fragment = NotesContentFragment.newInstance(index);
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.notes_fragments_container, fragment)
+                .add(R.id.notes_fragments_container,fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack(null)
                 .commit();
-
 
     }
 
@@ -198,15 +225,15 @@ public class NotesFragment extends Fragment {
                 .commit();
     }
 
-
-    void updateText(int index) {
-        LinearLayout linearLayout = (LinearLayout) getView();
-        for (int i = 0; i < linearLayout.getChildCount(); i++) {
-            TextView textView = (TextView) linearLayout.getChildAt(i);
-            textView.setBackgroundColor(Color.WHITE);
-        }
-        ((TextView) linearLayout.getChildAt(index)).setBackgroundColor(getResources().getColor(R.color.secondaryLightColor));
-    }
+//
+//    void updateText(int index) {
+//        LinearLayout linearLayout = (LinearLayout) getView();
+//        for (int i = 0; i < linearLayout.getChildCount(); i++) {
+//            TextView textView = (TextView) linearLayout.getChildAt(i);
+//            textView.setBackgroundColor(Color.WHITE);
+//        }
+//        ((TextView) linearLayout.getChildAt(index)).setBackgroundColor(getResources().getColor(R.color.secondaryLightColor));
+//    }
 
 
 }
